@@ -8,7 +8,7 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
-// connectDB();
+// connectDB(); // MongoDB is not installed/running locally. Using mock data or skipping DB connection for now.
 
 const app = express();
 
