@@ -1,0 +1,35 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Courses from './pages/Courses';
+import CourseDetails from './pages/CourseDetails';
+import Dashboard from './pages/Dashboard';
+import AdminPanel from './pages/AdminPanel';
+import Mentors from './pages/Mentors';
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:id" element={<CourseDetails />} />
+            <Route path="/mentors" element={<Mentors />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/admin" element={<AdminPanel />} />
+            {/* Fallback route */}
+            <Route path="*" element={<div className="p-20 text-center text-xl">404 - Page Not Found</div>} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
