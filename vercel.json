@@ -4,12 +4,12 @@
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "client/dist" }
+      "config": { "distDir": "dist" }
     }
   ],
   "installCommand": "npm ci --prefix client",
   "buildCommand": "npm run build --prefix client",
-  "routes": [
-    { "src": "/(.*)", "dest": "client/dist/index.html" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
