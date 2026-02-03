@@ -30,6 +30,9 @@ const Navbar = () => {
             <Link to="/" className="text-gray-600 hover:text-indigo-600 font-medium transition">Home</Link>
             <Link to="/courses" className="text-gray-600 hover:text-indigo-600 font-medium transition">Courses</Link>
             <Link to="/mentors" className="text-gray-600 hover:text-indigo-600 font-medium transition">Mentors</Link>
+            <Link to="/about" className="text-gray-600 hover:text-indigo-600 font-medium transition">About Me</Link>
+            <Link to="/chatbot" className="text-gray-600 hover:text-indigo-600 font-medium transition">AI Chatbot</Link>
+            <Link to="/contact" className="text-gray-600 hover:text-indigo-600 font-medium transition">Contact</Link>
             
             {user ? (
               <div className="flex items-center gap-4">
@@ -66,6 +69,9 @@ const Navbar = () => {
             <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">Home</Link>
             <Link to="/courses" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">Courses</Link>
             <Link to="/mentors" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">Mentors</Link>
+            <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">About Me</Link>
+                <Link to="/chatbot" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">AI Chatbot</Link>
+                <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">Contact</Link>
             
             {user ? (
               <>

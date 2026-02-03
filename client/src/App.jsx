@@ -8,6 +8,9 @@ import CourseDetails from './pages/CourseDetails';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
 import Mentors from './pages/Mentors';
+import About from './pages/About';
+import Chatbot from './pages/Chatbot';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetails />} />
             <Route path="/mentors" element={<Mentors />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/chatbot" element={<Chatbot />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<AdminPanel />} />
             {/* Fallback route */}

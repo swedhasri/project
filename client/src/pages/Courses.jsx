@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Search, Filter, Star, Clock, BarChart } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { motion } from 'framer-motion';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -71,6 +72,66 @@ const Courses = () => {
             thumbnailUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Soft Skills',
             price: 29
+          },
+          {
+            _id: '5',
+            title: 'JavaScript Algorithms and Data Structures',
+            description: 'Master algorithms and data structures in JavaScript with practical problems and solutions.',
+            instructor: 'Colt Steele',
+            rating: 4.7,
+            duration: 30,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Programming',
+            price: 39
+          },
+          {
+            _id: '6',
+            title: 'React and Redux from Zero to Hero',
+            description: 'Build scalable React apps with modern patterns, hooks, and Redux Toolkit.',
+            instructor: 'Maximilian Schwarzmüller',
+            rating: 4.8,
+            duration: 28,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Web Development',
+            price: 49
+          },
+          {
+            _id: '7',
+            title: 'AI & Machine Learning A-Z',
+            description: 'Create machine learning algorithms in Python. Hands-on with real-world datasets.',
+            instructor: 'Kirill Eremenko',
+            rating: 4.5,
+            duration: 45,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1511458059420-11b1640acb8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Data Science',
+            price: 69
+          },
+          {
+            _id: '8',
+            title: 'DevOps Fundamentals',
+            description: 'Learn CI/CD, Docker, Kubernetes, and cloud deployment best practices.',
+            instructor: 'Tech World',
+            rating: 4.6,
+            duration: 22,
+            level: 'Beginner',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Programming',
+            price: 39
+          },
+          {
+            _id: '9',
+            title: 'Advanced Node.js and Microservices',
+            description: 'Design, build, and deploy microservices with Node.js and message queues.',
+            instructor: 'Stephen Grider',
+            rating: 4.7,
+            duration: 32,
+            level: 'Advanced',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Programming',
+            price: 59
           }
         ]);
       }
@@ -92,7 +153,9 @@ const Courses = () => {
       <div className="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Explore Our Courses</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Courses</span>
+          </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">Discover a wide range of courses designed to help you master new skills and advance your career.</p>
         </div>
 
@@ -137,14 +200,21 @@ const Courses = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.length > 0 ? (
               filteredCourses.map((course) => (
-                <div key={course._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden border border-gray-100 flex flex-col h-full">
+                <motion.div 
+                  key={course._id} 
+                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden border border-gray-100 flex flex-col h-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <div className="relative h-48 overflow-hidden">
                     <img 
                       src={course.thumbnailUrl} 
                       alt={course.title} 
                       className="w-full h-full object-cover hover:scale-105 transition duration-500"
                     />
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-indigo-600 shadow-sm">
+                    <div className="absolute top-4 right-4 chip text-indigo-600">
                       {course.category}
                     </div>
                   </div>
@@ -155,7 +225,7 @@ const Courses = () => {
                         <span>{course.rating}</span>
                         <span className="text-gray-400">({course.numReviews || 120})</span>
                       </div>
-                      <span className="text-green-600 font-bold">${course.price}</span>
+                      {/* Price removed per request */}
                     </div>
                     
                     <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{course.title}</h3>
@@ -187,7 +257,7 @@ const Courses = () => {
                       </Link>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="col-span-full text-center py-12">

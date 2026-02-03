@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Users, Award, TrendingUp, PlayCircle } from 'lucide-react';
+import { ArrowRight, BookOpen, Users, TrendingUp, PlayCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 

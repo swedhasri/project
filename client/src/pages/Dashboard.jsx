@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { BookOpen, Award, TrendingUp, Clock, PlayCircle } from 'lucide-react';
+import { BookOpen, TrendingUp, Clock, PlayCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext';
 
@@ -115,20 +115,7 @@ const Dashboard = () => {
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-lg text-gray-900">Achievements</h3>
-                    <Award className="text-yellow-500" />
-                </div>
-                <div className="flex gap-2">
-                    {[1,2,3].map(i => (
-                        <div key={i} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition cursor-help" title="Locked Badge">
-                            🏅
-                        </div>
-                    ))}
-                </div>
-                <p className="text-sm text-gray-500 mt-4">Complete 2 more lessons to unlock 'Fast Learner' badge!</p>
-            </div>
+            {/* Achievements card removed per request */}
         </div>
 
         <h2 className="text-2xl font-bold text-gray-900 mb-6">My Courses</h2>

@@ -11,6 +11,28 @@ const CourseDetails = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
+  const [selectedVideoTitle, setSelectedVideoTitle] = useState('');
+  const [videoLoading, setVideoLoading] = useState(false);
+  const toYouTubeEmbed = (url) => {
+    if (!url) return '';
+    try {
+      const u = new URL(url);
+      if (u.hostname.includes('youtube.com')) {
+        const v = u.searchParams.get('v');
+        if (v) return `https://www.youtube.com/embed/${v}?rel=0`;
+        // already embed or playlist
+        if (u.pathname.startsWith('/embed/')) return url;
+      }
+      if (u.hostname === 'youtu.be') {
+        const id = u.pathname.replace('/', '');
+        if (id) return `https://www.youtube.com/embed/${id}?rel=0`;
+      }
+      return '';
+    } catch {
+      return '';
+    }
+  };
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -20,34 +42,193 @@ const CourseDetails = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching course:', error);
-        // Fallback for demo
-        if (id === '1') {
-            setCourse({
-                _id: '1',
-                title: 'Complete Web Development Bootcamp',
-                description: 'Become a full-stack web developer with just one course. HTML, CSS, Javascript, Node, React, MongoDB and more!',
-                instructor: 'Dr. Angela Yu',
-                rating: 4.8,
-                duration: 50,
-                level: 'Beginner',
-                thumbnailUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-                category: 'Web Development',
-                price: 49,
-                syllabus: [
-                    { title: 'Introduction to HTML', duration: '1:00' },
-                    { title: 'CSS Styling', duration: '2:30' },
-                    { title: 'Javascript Basics', duration: '4:00' },
-                    { title: 'React Framework', duration: '6:00' },
-                    { title: 'Node.js Backend', duration: '5:00' }
-                ]
-            });
-        }
+        const dummyCourses = {
+          '1': {
+            _id: '1',
+            title: 'Complete Web Development Bootcamp',
+            description: 'Become a full-stack web developer with just one course. HTML, CSS, Javascript, Node, React, MongoDB and more!',
+            instructor: 'Dr. Angela Yu',
+            rating: 4.8,
+            duration: 50,
+            level: 'Beginner',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Web Development',
+            price: 49,
+            videoUrl: 'https://www.youtube.com/watch?v=UB1O30fR-EE',
+            syllabus: [
+              { title: 'Introduction to HTML', duration: '1:00', videoUrl: 'https://www.youtube.com/watch?v=UB1O30fR-EE' },
+              { title: 'CSS Styling', duration: '2:30', videoUrl: 'https://www.youtube.com/watch?v=yfoY53QXEnI' },
+              { title: 'Javascript Basics', duration: '4:00', videoUrl: 'https://www.youtube.com/watch?v=W6NZfCO5SIk' },
+              { title: 'React Framework', duration: '6:00', videoUrl: 'https://www.youtube.com/watch?v=bMknfKXIFA8' },
+              { title: 'Node.js Backend', duration: '5:00', videoUrl: 'https://www.youtube.com/watch?v=TlB_eWDSMt4' }
+            ]
+          },
+          '2': {
+            _id: '2',
+            title: 'Python for Data Science and Machine Learning',
+            description: 'Learn NumPy, Pandas, visualization, and ML with hands-on labs.',
+            instructor: 'Jose Portilla',
+            rating: 4.7,
+            duration: 40,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Data Science',
+            price: 59,
+            videoUrl: 'https://www.youtube.com/watch?v=_uQrJ0TkZlc',
+            syllabus: [
+              { title: 'Python Crash Course', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=_uQrJ0TkZlc' },
+              { title: 'NumPy & Pandas', duration: '3:30', videoUrl: 'https://www.youtube.com/watch?v=vmEHCJofslg' },
+              { title: 'Data Visualization', duration: '4:00', videoUrl: 'https://www.youtube.com/watch?v=3Xc3CA655Y4' },
+              { title: 'Machine Learning Basics', duration: '5:00', videoUrl: 'https://www.youtube.com/watch?v=7eh4d6sabA0' }
+            ]
+          },
+          '3': {
+            _id: '3',
+            title: 'The Complete Cyber Security Course',
+            description: 'Hackers exposed, defensive strategies, and security tooling.',
+            instructor: 'Nathan House',
+            rating: 4.9,
+            duration: 35,
+            level: 'Advanced',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Cyber Security',
+            price: 39,
+            videoUrl: 'https://www.youtube.com/watch?v=inWWhr5tnEA',
+            syllabus: [
+              { title: 'Intro to Cyber Security', duration: '1:30', videoUrl: 'https://www.youtube.com/watch?v=inWWhr5tnEA' },
+              { title: 'Network Security', duration: '4:00', videoUrl: 'https://www.youtube.com/watch?v=Y45SE3RVMHc' },
+              { title: 'Malware Threats', duration: '3:00', videoUrl: 'https://www.youtube.com/watch?v=yxYEV6aC5SU' },
+              { title: 'Anonymous Browsing', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=7Vixer0C1Nk' }
+            ]
+          },
+          '4': {
+            _id: '4',
+            title: 'Mastering Soft Skills for Success',
+            description: 'Communication, leadership, emotional intelligence, and teamwork.',
+            instructor: 'Simon Sinek',
+            rating: 4.6,
+            duration: 12,
+            level: 'Beginner',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Soft Skills',
+            price: 29,
+            videoUrl: 'https://www.youtube.com/watch?v=2zqKc5QdQgs',
+            syllabus: [
+              { title: 'Effective Communication', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=HAnw168huqA' },
+              { title: 'Leadership Principles', duration: '2:30', videoUrl: 'https://www.youtube.com/watch?v=1R6BML0J7Ew' },
+              { title: 'Time Management', duration: '1:30', videoUrl: 'https://www.youtube.com/watch?v=gu8K2xGZLZQ' }
+            ]
+          },
+          '5': {
+            _id: '5',
+            title: 'JavaScript Algorithms and Data Structures',
+            description: 'Practical algorithms with JavaScript and data structure mastery.',
+            instructor: 'Colt Steele',
+            rating: 4.7,
+            duration: 30,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Programming',
+            price: 39,
+            videoUrl: 'https://www.youtube.com/watch?v=t2CEgPsws3U',
+            syllabus: [
+              { title: 'Time Complexity', duration: '1:00', videoUrl: 'https://www.youtube.com/watch?v=RGuJqTPtPcM' },
+              { title: 'Arrays & Linked Lists', duration: '2:30', videoUrl: 'https://www.youtube.com/watch?v=YQAtGNWvX2w' },
+              { title: 'Stacks & Queues', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=wjI1WNcIntg' },
+              { title: 'Trees & Graphs', duration: '3:00', videoUrl: 'https://www.youtube.com/watch?v=fAAZixBzIAI' }
+            ]
+          },
+          '6': {
+            _id: '6',
+            title: 'React and Redux from Zero to Hero',
+            description: 'Modern React patterns, hooks, and Redux Toolkit state management.',
+            instructor: 'Maximilian Schwarzmüller',
+            rating: 4.8,
+            duration: 28,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Web Development',
+            price: 49,
+            videoUrl: 'https://www.youtube.com/watch?v=SqcY0GlETPk',
+            syllabus: [
+              { title: 'React Fundamentals', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=SqcY0GlETPk' },
+              { title: 'Hooks Deep Dive', duration: '3:00', videoUrl: 'https://www.youtube.com/watch?v=TNhaISOUy6Q' },
+              { title: 'Redux Toolkit', duration: '3:00', videoUrl: 'https://www.youtube.com/watch?v=9zySeP5vH9c' },
+              { title: 'Testing Components', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=ovZ4r7lQWxs' }
+            ]
+          },
+          '7': {
+            _id: '7',
+            title: 'AI & Machine Learning A-Z',
+            description: 'End-to-end ML workflows with Python and real datasets.',
+            instructor: 'Kirill Eremenko',
+            rating: 4.5,
+            duration: 45,
+            level: 'Intermediate',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1511458059420-11b1640acb8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Data Science',
+            price: 69,
+            videoUrl: 'https://www.youtube.com/watch?v=GwIo3gDZCVQ',
+            syllabus: [
+              { title: 'Data Preprocessing', duration: '1:00', videoUrl: 'https://www.youtube.com/watch?v=UsfB3V0E8Dw' },
+              { title: 'Regression', duration: '3:00', videoUrl: 'https://www.youtube.com/watch?v=E5RjzSK0fvY' },
+              { title: 'Classification', duration: '3:00', videoUrl: 'https://www.youtube.com/watch?v=G6W8F3mz3tA' },
+              { title: 'Clustering', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=4b5d3muPQmA' }
+            ]
+          },
+          '8': {
+            _id: '8',
+            title: 'DevOps Fundamentals',
+            description: 'CI/CD, Docker, Kubernetes, monitoring, and deployment pipelines.',
+            instructor: 'Tech World',
+            rating: 4.6,
+            duration: 22,
+            level: 'Beginner',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Programming',
+            price: 39,
+            videoUrl: 'https://www.youtube.com/watch?v=0yWAtQ6wYNM',
+            syllabus: [
+              { title: 'Docker Basics', duration: '1:30', videoUrl: 'https://www.youtube.com/watch?v=pTFZFxd4hOI' },
+              { title: 'Kubernetes Intro', duration: '2:30', videoUrl: 'https://www.youtube.com/watch?v=X48VuDVv0do' },
+              { title: 'CI/CD Pipelines', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=scEDHsr3APg' }
+            ]
+          },
+          '9': {
+            _id: '9',
+            title: 'Advanced Node.js and Microservices',
+            description: 'Microservice architectures, messaging, and robust Node.js services.',
+            instructor: 'Stephen Grider',
+            rating: 4.7,
+            duration: 32,
+            level: 'Advanced',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            category: 'Programming',
+            price: 59,
+            videoUrl: 'https://www.youtube.com/watch?v=GZB-6S2RKTw',
+            syllabus: [
+              { title: 'Service Design', duration: '1:30', videoUrl: 'https://www.youtube.com/watch?v=GZB-6S2RKTw' },
+              { title: 'Queues & Events', duration: '2:30', videoUrl: 'https://www.youtube.com/watch?v=qh7RY2RPPGw' },
+              { title: 'Deployment', duration: '2:00', videoUrl: 'https://www.youtube.com/watch?v=GZB-6S2RKTw' }
+            ]
+          }
+        };
+        if (dummyCourses[id]) setCourse(dummyCourses[id]);
         setLoading(false);
       }
     };
 
     fetchCourse();
   }, [id]);
+  useEffect(() => {
+    if (course) {
+      const first = course.syllabus && course.syllabus[0] && course.syllabus[0].videoUrl;
+      const firstTitle = course.syllabus && course.syllabus[0] && course.syllabus[0].title;
+      const chosen = first || course.videoUrl || '';
+      setSelectedVideoUrl(chosen);
+      setSelectedVideoTitle(firstTitle || course.title || '');
+    }
+  }, [course]);
 
   const handleEnroll = async () => {
     if (!user) {
@@ -125,12 +306,59 @@ const CourseDetails = () => {
                     </div>
                 </div>
 
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl md:text-2xl font-bold text-gray-900">{selectedVideoTitle || 'Course Preview'}</h2>
+                    </div>
+                    {selectedVideoUrl ? (
+                      <>
+                        {(() => {
+                          const embed = toYouTubeEmbed(selectedVideoUrl);
+                          if (embed) {
+                            return (
+                              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                                {videoLoading && (
+                                  <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+                                  </div>
+                                )}
+                                <iframe
+                                  src={embed}
+                                  title={selectedVideoTitle || 'Course Video'}
+                                  className="absolute top-0 left-0 w-full h-full rounded-lg shadow-sm"
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                  onLoad={() => setVideoLoading(false)}
+                                />
+                              </div>
+                            );
+                          }
+                          return (
+                            <div className="w-full h-64 md:h-96 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                              Video URL is not a valid YouTube link
+                            </div>
+                          );
+                        })()}
+                      </>
+                    ) : (
+                      <div className="w-full h-64 md:h-96 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">No video available</div>
+                    )}
+                </div>
                 {/* Course Content */}
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                         {course.syllabus && course.syllabus.map((chapter, index) => (
-                            <div key={index} className="border-b border-gray-100 last:border-0 p-4 hover:bg-gray-50 transition flex justify-between items-center">
+                            <div
+                              key={index}
+                              onClick={() => {
+                                setVideoLoading(true);
+                                setSelectedVideoUrl(chapter.videoUrl || course.videoUrl || '');
+                                setSelectedVideoTitle(chapter.title || course.title || '');
+                              }}
+                              className="border-b border-gray-100 last:border-0 p-4 hover:bg-gray-50 transition flex justify-between items-center cursor-pointer"
+                            >
                                 <div className="flex items-center gap-4">
                                     <PlayCircle className="text-gray-400" size={20} />
                                     <span className="text-gray-700 font-medium">{chapter.title}</span>
@@ -153,9 +381,7 @@ const CourseDetails = () => {
                             </div>
                         </div>
                         <div className="p-6 space-y-6">
-                            <div className="flex items-end gap-2">
-                                <span className="text-3xl font-bold text-gray-900">${course.price}</span>
-                            </div>
+                            {/* Price removed per request */}
                             
                             <button 
                                 onClick={handleEnroll}
