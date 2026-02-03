@@ -7,7 +7,7 @@
       "config": { "distDir": "dist" }
     }
   ],
-  "installCommand": "npm ci --prefix client",
+  "installCommand": "npm install --prefix client",
   "buildCommand": "npm run build --prefix client",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
