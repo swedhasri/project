@@ -8,7 +8,7 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
-// connectDB(); // MongoDB is not installed/running locally. Using mock data or skipping DB connection for now.
+connectDB(); // Safe: db.js logs errors and does not exit on failure
 
 const app = express();
 
@@ -29,6 +29,7 @@ app.use(express.static(staticPath));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/courses', require('./routes/courseRoutes'));
 app.use('/api/enrollments', require('./routes/enrollmentRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
 
 // Serve static assets
 // app.use(express.static(path.join(__dirname, '../client/dist')));

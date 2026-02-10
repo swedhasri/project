@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { PlayCircle, Clock, BarChart, Star, CheckCircle, BookOpen, User, Shield } from 'lucide-react';
+import { PlayCircle, Clock, BarChart, Star, CheckCircle, BookOpen, User, Shield, Gamepad2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import YouTubeGame from '../components/games/YouTubeGame';
 import { AuthContext } from '../context/AuthContext';
 
 const CourseDetails = () => {
@@ -37,7 +38,7 @@ const CourseDetails = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/courses/${id}`);
+        const { data } = await axios.get(`/api/courses/${id}`);
         setCourse(data);
         setLoading(false);
       } catch (error) {
@@ -232,20 +233,20 @@ const CourseDetails = () => {
 
   const handleEnroll = async () => {
     if (!user) {
-        alert('Please login to enroll');
-        return;
+      alert('Please login to enroll');
+      return;
     }
     try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            },
-        };
-        await axios.post('http://localhost:5000/api/enrollments', { courseId: id }, config);
-        alert('Enrolled successfully!');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios.post('/api/enrollments', { courseId: id }, config);
+      alert('Enrolled successfully!');
     } catch (error) {
-        console.error(error);
-        alert(error.response?.data?.message || 'Enrollment failed');
+      console.error(error);
+      alert(error.response?.data?.message || 'Enrollment failed');
     }
   };
 
@@ -255,159 +256,168 @@ const CourseDetails = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
-      
+
       {/* Course Header */}
       <div className="bg-gray-900 text-white pt-32 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="flex items-center gap-2 text-indigo-400 font-medium">
-                        <span>{course.category}</span>
-                        <span>•</span>
-                        <span>{course.level}</span>
-                    </div>
-                    <h1 className="text-4xl font-bold leading-tight">{course.title}</h1>
-                    <p className="text-xl text-gray-300">{course.description}</p>
-                    
-                    <div className="flex items-center gap-6 text-sm">
-                        <div className="flex items-center gap-1 text-yellow-400">
-                            <Star size={18} fill="currentColor" />
-                            <span className="font-bold text-white">{course.rating}</span>
-                            <span className="text-gray-400">({course.numReviews || 120} ratings)</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-gray-300">
-                            <User size={18} />
-                            <span>Created by <span className="text-white underline">{course.instructor}</span></span>
-                        </div>
-                        <div className="flex items-center gap-1 text-gray-300">
-                            <Shield size={18} />
-                            <span>Last updated {new Date().toLocaleDateString()}</span>
-                        </div>
-                    </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex items-center gap-2 text-indigo-400 font-medium">
+                <span>{course.category}</span>
+                <span>•</span>
+                <span>{course.level}</span>
+              </div>
+              <h1 className="text-4xl font-bold leading-tight">{course.title}</h1>
+              <p className="text-xl text-gray-300">{course.description}</p>
+
+              <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-1 text-yellow-400">
+                  <Star size={18} fill="currentColor" />
+                  <span className="font-bold text-white">{course.rating}</span>
+                  <span className="text-gray-400">({course.numReviews || 120} ratings)</span>
                 </div>
+                <div className="flex items-center gap-1 text-gray-300">
+                  <User size={18} />
+                  <span>Created by <span className="text-white underline">{course.instructor}</span></span>
+                </div>
+                <div className="flex items-center gap-1 text-gray-300">
+                  <Shield size={18} />
+                  <span>Last updated {new Date().toLocaleDateString()}</span>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Left Content */}
-            <div className="lg:col-span-2 space-y-12">
-                {/* What you'll learn */}
-                <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">What you'll learn</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['Master the core concepts', 'Build real-world projects', 'Get industry ready', 'Earn a certificate'].map((item, index) => (
-                            <div key={index} className="flex items-start gap-3">
-                                <CheckCircle className="text-green-500 flex-shrink-0 mt-1" size={18} />
-                                <span className="text-gray-700">{item}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl md:text-2xl font-bold text-gray-900">{selectedVideoTitle || 'Course Preview'}</h2>
-                    </div>
-                    {selectedVideoUrl ? (
-                      <>
-                        {(() => {
-                          const embed = toYouTubeEmbed(selectedVideoUrl);
-                          if (embed) {
-                            return (
-                              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-                                {videoLoading && (
-                                  <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-                                  </div>
-                                )}
-                                <iframe
-                                  src={embed}
-                                  title={selectedVideoTitle || 'Course Video'}
-                                  className="absolute top-0 left-0 w-full h-full rounded-lg shadow-sm"
-                                  frameBorder="0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                  onLoad={() => setVideoLoading(false)}
-                                />
-                              </div>
-                            );
-                          }
-                          return (
-                            <div className="w-full h-64 md:h-96 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-                              Video URL is not a valid YouTube link
-                            </div>
-                          );
-                        })()}
-                      </>
-                    ) : (
-                      <div className="w-full h-64 md:h-96 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">No video available</div>
-                    )}
-                </div>
-                {/* Course Content */}
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        {course.syllabus && course.syllabus.map((chapter, index) => (
-                            <div
-                              key={index}
-                              onClick={() => {
-                                setVideoLoading(true);
-                                setSelectedVideoUrl(chapter.videoUrl || course.videoUrl || '');
-                                setSelectedVideoTitle(chapter.title || course.title || '');
-                              }}
-                              className="border-b border-gray-100 last:border-0 p-4 hover:bg-gray-50 transition flex justify-between items-center cursor-pointer"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <PlayCircle className="text-gray-400" size={20} />
-                                    <span className="text-gray-700 font-medium">{chapter.title}</span>
-                                </div>
-                                <span className="text-gray-500 text-sm">{chapter.duration}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+          {/* Left Content */}
+          <div className="lg:col-span-2 space-y-12">
+            {/* What you'll learn */}
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">What you'll learn</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {['Master the core concepts', 'Build real-world projects', 'Get industry ready', 'Earn a certificate'].map((item, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0 mt-1" size={18} />
+                    <span className="text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Right Sidebar (Floating Card) */}
-            <div className="lg:col-span-1 relative">
-                <div className="sticky top-24">
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                        <div className="relative h-48">
-                            <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                                <PlayCircle className="text-white opacity-80" size={64} />
-                            </div>
-                        </div>
-                        <div className="p-6 space-y-6">
-                            {/* Price removed per request */}
-                            
-                            <button 
-                                onClick={handleEnroll}
-                                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200"
-                            >
-                                Enroll Now
-                            </button>
-                            
-                            <div className="space-y-4 text-sm text-gray-600">
-                                <div className="flex justify-between border-b pb-2">
-                                    <span className="flex items-center gap-2"><Clock size={16}/> Duration</span>
-                                    <span className="font-medium">{course.duration} hours</span>
-                                </div>
-                                <div className="flex justify-between border-b pb-2">
-                                    <span className="flex items-center gap-2"><BookOpen size={16}/> Lessons</span>
-                                    <span className="font-medium">{course.syllabus ? course.syllabus.length : 0}</span>
-                                </div>
-                                <div className="flex justify-between border-b pb-2">
-                                    <span className="flex items-center gap-2"><BarChart size={16}/> Level</span>
-                                    <span className="font-medium">{course.level}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900">{selectedVideoTitle || 'Course Preview'}</h2>
+              </div>
+              {selectedVideoUrl ? (
+                <>
+                  {(() => {
+                    const videoId = toYouTubeEmbed(selectedVideoUrl)?.split('/').pop()?.split('?')[0];
+                    if (videoId) {
+                      return (
+                        <YouTubeGame
+                          videoId={videoId}
+                          videoUrl={selectedVideoUrl}
+                          startTime={0}
+                        />
+                      );
+                    }
+                    return (
+                      <div className="w-full h-64 md:h-96 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                        Video URL is not a valid YouTube link
+                      </div>
+                    );
+                  })()}
+                </>
+              ) : (
+                <div className="w-full h-64 md:h-96 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">No video available</div>
+              )}
             </div>
+            {/* Course Content */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                {course.syllabus && course.syllabus.map((chapter, index) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setVideoLoading(true);
+                      setSelectedVideoUrl(chapter.videoUrl || course.videoUrl || '');
+                      setSelectedVideoTitle(chapter.title || course.title || '');
+                    }}
+                    className="border-b border-gray-100 last:border-0 p-4 hover:bg-gray-50 transition flex justify-between items-center cursor-pointer"
+                  >
+                    <div className="flex items-center gap-4">
+                      <PlayCircle className="text-gray-400" size={20} />
+                      <span className="text-gray-700 font-medium">{chapter.title}</span>
+                    </div>
+                    <span className="text-gray-500 text-sm">{chapter.duration}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar (Floating Card) */}
+          <div className="lg:col-span-1 relative">
+            <div className="sticky top-24">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="relative h-48">
+                  <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    <PlayCircle className="text-white opacity-80" size={64} />
+                  </div>
+                </div>
+                <div className="p-6 space-y-6">
+                  {/* Price removed per request */}
+
+                  <button
+                    onClick={handleEnroll}
+                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200"
+                  >
+                    Enroll Now
+                  </button>
+
+                  {course.gameLevels && (
+                    <Link
+                      to={`/courses/${id}/play`}
+                      className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-3 rounded-lg font-bold hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 group"
+                    >
+                      <Zap size={20} className="text-yellow-400 group-hover:scale-110 transition" fill="currentColor" />
+                      Start Game Journey
+                    </Link>
+                  )}
+
+                  {course.games && course.games.length > 0 && (
+                    <Link
+                      to={`/courses/${id}/games`}
+                      className="w-full bg-gray-50 text-indigo-600 py-3 rounded-lg font-bold hover:bg-gray-100 transition border-2 border-indigo-100 flex items-center justify-center gap-2"
+                    >
+                      <Gamepad2 size={20} />
+                      Quick Games ({course.games.length})
+                    </Link>
+                  )}
+
+                  <div className="space-y-4 text-sm text-gray-600">
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="flex items-center gap-2"><Clock size={16} /> Duration</span>
+                      <span className="font-medium">{course.duration} hours</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="flex items-center gap-2"><BookOpen size={16} /> Lessons</span>
+                      <span className="font-medium">{course.syllabus ? course.syllabus.length : 0}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="flex items-center gap-2"><BarChart size={16} /> Level</span>
+                      <span className="font-medium">{course.level}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

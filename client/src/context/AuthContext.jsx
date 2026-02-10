@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        'http://localhost:5000/api/users/login',
+        '/api/users/login',
         { email, password },
         config
       );
@@ -33,16 +33,16 @@ export const AuthProvider = ({ children }) => {
       setUser(data);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.response && error.response.data.message
           ? error.response.data.message
-          : error.message 
+          : error.message
       };
     }
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, profileData = {}) => {
     try {
       const config = {
         headers: {
@@ -51,8 +51,8 @@ export const AuthProvider = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        'http://localhost:5000/api/users',
-        { name, email, password },
+        '/api/users',
+        { name, email, password, ...profileData },
         config
       );
 
@@ -60,11 +60,11 @@ export const AuthProvider = ({ children }) => {
       setUser(data);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.response && error.response.data.message
           ? error.response.data.message
-          : error.message 
+          : error.message
       };
     }
   };

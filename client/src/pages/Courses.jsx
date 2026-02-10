@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Search, Filter, Star, Clock, BarChart } from 'lucide-react';
+import { Search, Filter, Star, Clock, BarChart, Play, BookOpen, CheckCircle2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
@@ -17,7 +17,12 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/courses');
+        const { data } = await axios.get('/api/courses');
+        if (!Array.isArray(data)) {
+          console.error('Expected array from /api/courses, got:', typeof data);
+          setLoading(false);
+          return;
+        }
         setCourses(data);
         setLoading(false);
       } catch (error) {
@@ -35,7 +40,12 @@ const Courses = () => {
             level: 'Beginner',
             thumbnailUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Web Development',
-            price: 49
+            price: 49,
+            syllabus: [
+              { title: 'Introduction to HTML' },
+              { title: 'CSS Styling' },
+              { title: 'Javascript Basics' }
+            ]
           },
           {
             _id: '2',
@@ -47,7 +57,12 @@ const Courses = () => {
             level: 'Intermediate',
             thumbnailUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Data Science',
-            price: 59
+            price: 59,
+            syllabus: [
+              { title: 'Python Crash Course' },
+              { title: 'NumPy & Pandas' },
+              { title: 'Data Visualization' }
+            ]
           },
           {
             _id: '3',
@@ -59,7 +74,12 @@ const Courses = () => {
             level: 'Advanced',
             thumbnailUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Cyber Security',
-            price: 39
+            price: 39,
+            syllabus: [
+              { title: 'Intro to Cyber Security' },
+              { title: 'Network Security' },
+              { title: 'Malware Threats' }
+            ]
           },
           {
             _id: '4',
@@ -71,7 +91,12 @@ const Courses = () => {
             level: 'Beginner',
             thumbnailUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Soft Skills',
-            price: 29
+            price: 29,
+            syllabus: [
+              { title: 'Effective Communication' },
+              { title: 'Leadership Principles' },
+              { title: 'Time Management' }
+            ]
           },
           {
             _id: '5',
@@ -83,7 +108,12 @@ const Courses = () => {
             level: 'Intermediate',
             thumbnailUrl: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Programming',
-            price: 39
+            price: 39,
+            syllabus: [
+              { title: 'Time Complexity' },
+              { title: 'Arrays & Linked Lists' },
+              { title: 'Stacks & Queues' }
+            ]
           },
           {
             _id: '6',
@@ -95,7 +125,12 @@ const Courses = () => {
             level: 'Intermediate',
             thumbnailUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Web Development',
-            price: 49
+            price: 49,
+            syllabus: [
+              { title: 'React Fundamentals' },
+              { title: 'Hooks Deep Dive' },
+              { title: 'Redux Toolkit' }
+            ]
           },
           {
             _id: '7',
@@ -107,7 +142,12 @@ const Courses = () => {
             level: 'Intermediate',
             thumbnailUrl: 'https://images.unsplash.com/photo-1511458059420-11b1640acb8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Data Science',
-            price: 69
+            price: 69,
+            syllabus: [
+              { title: 'Data Preprocessing' },
+              { title: 'Regression' },
+              { title: 'Classification' }
+            ]
           },
           {
             _id: '8',
@@ -119,7 +159,12 @@ const Courses = () => {
             level: 'Beginner',
             thumbnailUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Programming',
-            price: 39
+            price: 39,
+            syllabus: [
+              { title: 'Docker Basics' },
+              { title: 'Kubernetes Intro' },
+              { title: 'CI/CD Pipelines' }
+            ]
           },
           {
             _id: '9',
@@ -131,7 +176,12 @@ const Courses = () => {
             level: 'Advanced',
             thumbnailUrl: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
             category: 'Programming',
-            price: 59
+            price: 59,
+            syllabus: [
+              { title: 'Service Design' },
+              { title: 'Queues & Events' },
+              { title: 'Deployment' }
+            ]
           }
         ]);
       }
@@ -149,7 +199,7 @@ const Courses = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
-      
+
       <div className="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Header */}
         <div className="text-center mb-12">
@@ -173,17 +223,16 @@ const Courses = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          
+
           <div className="flex overflow-x-auto pb-2 md:pb-0 gap-2 w-full md:w-auto no-scrollbar">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                }`}
+                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === category
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
               >
                 {category}
               </button>
@@ -200,24 +249,29 @@ const Courses = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.length > 0 ? (
               filteredCourses.map((course) => (
-                <motion.div 
-                  key={course._id} 
+                <motion.div
+                  key={course._id}
                   className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden border border-gray-100 flex flex-col h-full"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={course.thumbnailUrl} 
-                      alt={course.title} 
-                      className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                  <Link to={`/courses/${course._id}/play`} className="relative h-48 overflow-hidden group">
+                    <img
+                      src={course.thumbnailUrl}
+                      alt={course.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                     />
-                    <div className="absolute top-4 right-4 chip text-indigo-600">
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <div className="bg-white/20 backdrop-blur-md p-3 rounded-full border border-white/30 text-white">
+                        <Play size={24} fill="currentColor" />
+                      </div>
+                    </div>
+                    <div className="absolute top-4 right-4 chip bg-white/90 backdrop-blur-sm text-indigo-600 font-bold border-none">
                       {course.category}
                     </div>
-                  </div>
+                  </Link>
                   <div className="p-6 flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center text-yellow-500 text-sm gap-1">
@@ -227,10 +281,12 @@ const Courses = () => {
                       </div>
                       {/* Price removed per request */}
                     </div>
-                    
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{course.title}</h3>
+
+                    <Link to={`/courses/${course._id}/play`}>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 hover:text-indigo-600 transition-colors cursor-pointer">{course.title}</h3>
+                    </Link>
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{course.description}</p>
-                    
+
                     <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
                       <div className="flex items-center gap-1">
                         <Clock size={14} />
@@ -241,20 +297,54 @@ const Courses = () => {
                         <span>{course.level}</span>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs">
-                          {course.instructor.charAt(0)}
+
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 gap-2">
+                      <div className="flex items-center gap-2 relative group">
+                        <div className="relative">
+                          <Link
+                            to={`/courses/${course._id}/play`}
+                            className="text-gray-500 hover:text-indigo-600 text-xs font-bold transition-colors py-2 px-1"
+                          >
+                            Watch Now
+                          </Link>
+
+                          {/* Quick Preview Popover */}
+                          <div className="absolute bottom-full right-0 mb-4 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 pointer-events-none">
+                            <div className="space-y-3">
+                              <h4 className="text-sm font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
+                                <BookOpen size={14} className="text-indigo-600" />
+                                Syllabus Preview
+                              </h4>
+                              <ul className="space-y-2">
+                                {course.syllabus?.slice(0, 3).map((item, i) => (
+                                  <li key={i} className="flex items-start gap-2 text-[11px] text-gray-600">
+                                    <div className="w-1 h-1 rounded-full bg-indigo-400 mt-1.5 flex-shrink-0" />
+                                    {item.title}
+                                  </li>
+                                ))}
+                              </ul>
+                              <div className="pt-2 border-t">
+                                <div className="flex items-center gap-2 text-[10px] text-green-600 font-bold mb-1">
+                                  <CheckCircle2 size={12} /> Certificate Included
+                                </div>
+                                <div className="flex items-center gap-2 text-[10px] text-indigo-600 font-bold">
+                                  <CheckCircle2 size={12} /> Full Lifetime Access
+                                </div>
+                              </div>
+                            </div>
+                            {/* Decorative arrow */}
+                            <div className="absolute top-full right-6 -mt-1 w-3 h-3 bg-white border-r border-b border-gray-100 rotate-45" />
+                          </div>
                         </div>
-                        <span className="text-sm font-medium text-gray-700 truncate max-w-[100px]">{course.instructor}</span>
+
+                        <Link
+                          to={`/courses/${course._id}/play`}
+                          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-indigo-200 transition-all flex items-center gap-1"
+                        >
+                          <Play size={14} fill="currentColor" className="text-white" />
+                          PLAY
+                        </Link>
                       </div>
-                      <Link 
-                        to={`/courses/${course._id}`} 
-                        className="text-indigo-600 font-semibold hover:text-indigo-800 text-sm"
-                      >
-                        View Details
-                      </Link>
                     </div>
                   </div>
                 </motion.div>
@@ -262,8 +352,8 @@ const Courses = () => {
             ) : (
               <div className="col-span-full text-center py-12">
                 <p className="text-gray-500 text-lg">No courses found matching your criteria.</p>
-                <button 
-                  onClick={() => {setSearchTerm(''); setSelectedCategory('All');}}
+                <button
+                  onClick={() => { setSearchTerm(''); setSelectedCategory('All'); }}
                   className="mt-4 text-indigo-600 hover:text-indigo-800 font-medium"
                 >
                   Clear filters

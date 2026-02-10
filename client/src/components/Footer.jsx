@@ -13,7 +13,7 @@ const Footer = () => {
               <span className="font-bold text-2xl tracking-tighter">Edu<span className="text-indigo-500">Bridge</span></span>
             </div>
             <p className="text-gray-400 text-sm">
-              Empowering college students with quality education, mentorship, and career guidance.
+              Empowering college students with quality education and career guidance.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition"><Facebook size={20} /></a>
@@ -29,7 +29,6 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><a href="/" className="text-gray-400 hover:text-white transition text-sm">Home</a></li>
               <li><a href="/courses" className="text-gray-400 hover:text-white transition text-sm">Courses</a></li>
-              <li><a href="/mentors" className="text-gray-400 hover:text-white transition text-sm">Mentors</a></li>
               <li><a href="/dashboard" className="text-gray-400 hover:text-white transition text-sm">Dashboard</a></li>
               <li><a href="/contact" className="text-gray-400 hover:text-white transition text-sm">Contact</a></li>
             </ul>
@@ -65,7 +64,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
           <p>&copy; {new Date().getFullYear()} EduBridge. All rights reserved.</p>
         </div>
