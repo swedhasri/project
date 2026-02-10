@@ -25,7 +25,7 @@ const Home = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 text-white relative overflow-hidden">
+      <section className="pt-32 pb-20 bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 dark:from-navy dark:via-navyDeep dark:to-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] opacity-10 bg-cover bg-center"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -37,11 +37,11 @@ const Home = () => {
                 Master in-demand skills and track your career growth with AI-powered recommendations.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/lets-play" className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-bold transition shadow-xl hover:shadow-indigo-500/40 flex items-center justify-center gap-2 group">
+                <Link to="/lets-play" className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 dark:bg-cyanAccent dark:hover:bg-cyan-400 text-white dark:text-black px-8 py-4 rounded-full font-bold transition shadow-xl hover:shadow-indigo-500/40 dark:shadow-none flex items-center justify-center gap-2 group accent-btn">
                   <PlayCircle size={24} className="group-hover:scale-110 transition" />
                   Let's Play
                 </Link>
-                <Link to="/courses" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold transition border border-white/30 flex items-center justify-center gap-2">
+                <Link to="/courses" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold transition border border-white/30 dark:border-cyanAccent flex items-center justify-center gap-2 accent-outline">
                   <BookOpen size={20} />
                   Explore Courses
                 </Link>

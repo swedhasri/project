@@ -25,3 +25,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+#
+# Temporary stray files
+client/tailwind.config.js.

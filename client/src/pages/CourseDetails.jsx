@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { PlayCircle, Clock, BarChart, Star, CheckCircle, BookOpen, User, Shield, Gamepad2 } from 'lucide-react';
+import { PlayCircle, Clock, BarChart, Star, CheckCircle, BookOpen, User, Shield, Gamepad2, Zap } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import YouTubeGame from '../components/games/YouTubeGame';
@@ -14,6 +14,7 @@ const CourseDetails = () => {
   const { user } = useContext(AuthContext);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
   const [selectedVideoTitle, setSelectedVideoTitle] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [videoLoading, setVideoLoading] = useState(false);
   const toYouTubeEmbed = (url) => {
     if (!url) return '';
@@ -228,6 +229,7 @@ const CourseDetails = () => {
       const chosen = first || course.videoUrl || '';
       setSelectedVideoUrl(chosen);
       setSelectedVideoTitle(firstTitle || course.title || '');
+      setCurrentIndex(0);
     }
   }, [course]);
 
@@ -310,6 +312,34 @@ const CourseDetails = () => {
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900">{selectedVideoTitle || 'Course Preview'}</h2>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      if (!course?.syllabus?.length) return;
+                      const prev = Math.max(currentIndex - 1, 0);
+                      const item = course.syllabus[prev];
+                      setCurrentIndex(prev);
+                      setSelectedVideoUrl(item.videoUrl || '');
+                      setSelectedVideoTitle(item.title || '');
+                    }}
+                    className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 text-gray-700"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!course?.syllabus?.length) return;
+                      const next = Math.min(currentIndex + 1, course.syllabus.length - 1);
+                      const item = course.syllabus[next];
+                      setCurrentIndex(next);
+                      setSelectedVideoUrl(item.videoUrl || '');
+                      setSelectedVideoTitle(item.title || '');
+                    }}
+                    className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 text-gray-700"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
               {selectedVideoUrl ? (
                 <>
@@ -321,6 +351,16 @@ const CourseDetails = () => {
                           videoId={videoId}
                           videoUrl={selectedVideoUrl}
                           startTime={0}
+                          onEnded={() => {
+                            if (!course?.syllabus?.length) return;
+                            const next = currentIndex + 1;
+                            if (next < course.syllabus.length) {
+                              const item = course.syllabus[next];
+                              setCurrentIndex(next);
+                              setSelectedVideoUrl(item.videoUrl || '');
+                              setSelectedVideoTitle(item.title || '');
+                            }
+                          }}
                         />
                       );
                     }
@@ -346,8 +386,9 @@ const CourseDetails = () => {
                       setVideoLoading(true);
                       setSelectedVideoUrl(chapter.videoUrl || course.videoUrl || '');
                       setSelectedVideoTitle(chapter.title || course.title || '');
+                      setCurrentIndex(index);
                     }}
-                    className="border-b border-gray-100 last:border-0 p-4 hover:bg-gray-50 transition flex justify-between items-center cursor-pointer"
+                    className={`border-b border-gray-100 last:border-0 p-4 transition flex justify-between items-center cursor-pointer ${index === currentIndex ? 'bg-indigo-50' : 'hover:bg-gray-50'}`}
                   >
                     <div className="flex items-center gap-4">
                       <PlayCircle className="text-gray-400" size={20} />

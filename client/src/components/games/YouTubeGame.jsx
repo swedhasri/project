@@ -18,7 +18,7 @@ const extractVideoId = (url) => {
     return null;
 };
 
-const YouTubeGame = ({ videoUrl, videoId: propVideoId, startTime = 0, endTime }) => {
+const YouTubeGame = ({ videoUrl, videoId: propVideoId, startTime = 0, endTime, onEnded }) => {
     const videoId = propVideoId || extractVideoId(videoUrl) || 'UB1O30fR-EE';
     const playerRef = useRef(null);
     const [player, setPlayer] = useState(null);
@@ -61,6 +61,9 @@ const YouTubeGame = ({ videoUrl, videoId: propVideoId, startTime = 0, endTime })
                             setIsPlaying(true);
                         } else {
                             setIsPlaying(false);
+                        }
+                        if (event.data === window.YT.PlayerState.ENDED && typeof onEnded === 'function') {
+                            onEnded();
                         }
                     }
                 }

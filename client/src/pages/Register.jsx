@@ -18,18 +18,7 @@ const Register = () => {
 
   const { register, user } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const skillsList = [
-    'HTML', 'CSS', 'C', 'JavaScript', 'Python', 'React', 'Node.js',
-    'Java', 'C++', 'SQL', 'MongoDB', 'AWS', 'Docker', 'Kubernetes',
-    'Machine Learning', 'Data Analysis', 'UI/UX Design', 'Project Management'
-  ];
-
-  const toggleSkill = (skill) => {
-    setSelectedSkills(prev =>
-      prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
-    );
-  };
+ 
 
   useEffect(() => {
     if (user) {
@@ -211,25 +200,7 @@ const Register = () => {
               />
             </div>
 
-            {/* Technical Skills */}
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-4">Technical Skills *</label>
-              <div className="flex flex-wrap gap-2">
-                {skillsList.map((skill) => (
-                  <button
-                    key={skill}
-                    type="button"
-                    onClick={() => toggleSkill(skill)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedSkills.includes(skill)
-                        ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-transparent'
-                      }`}
-                  >
-                    {skill}
-                  </button>
-                ))}
-              </div>
-            </div>
+ 
 
             <div className="pt-4 flex flex-col items-center gap-4">
               <button

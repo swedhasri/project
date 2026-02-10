@@ -12,7 +12,7 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const categories = ['All', 'Programming', 'Web Development', 'Data Science', 'Cyber Security', 'Soft Skills'];
+  const categories = ['All', 'Web Development', 'Data Science', 'Cyber Security', 'Soft Skills'];
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -303,13 +303,14 @@ const Courses = () => {
                         <div className="relative">
                           <Link
                             to={`/courses/${course._id}/play`}
-                            className="text-gray-500 hover:text-indigo-600 text-xs font-bold transition-colors py-2 px-1"
+                            className="inline-flex items-center gap-1 text-gray-500 hover:text-indigo-600 text-xs font-bold transition-colors py-2 px-1"
                           >
+                            <Play size={12} fill="currentColor" className="opacity-80" />
                             Watch Now
                           </Link>
 
                           {/* Quick Preview Popover */}
-                          <div className="absolute bottom-full right-0 mb-4 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 pointer-events-none">
+                          <div className="absolute bottom-full right-0 mb-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 pointer-events-none">
                             <div className="space-y-3">
                               <h4 className="text-sm font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
                                 <BookOpen size={14} className="text-indigo-600" />
@@ -323,6 +324,65 @@ const Courses = () => {
                                   </li>
                                 ))}
                               </ul>
+                              {course.description && (
+                                <div className="pt-2">
+                                  <h5 className="text-[11px] font-bold text-gray-900 mb-1">About this course</h5>
+                                  <p className="text-xs text-gray-700 leading-snug line-clamp-5">
+                                    {course.description}
+                                  </p>
+                                </div>
+                              )}
+                              <div className="flex items-center gap-3 text-[11px] text-gray-700 pt-1">
+                                <div className="flex items-center gap-1">
+                                  <BarChart size={12} /> {course.level}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Clock size={12} /> {course.duration}h
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  {course.category}
+                                </div>
+                              </div>
+                              {(() => {
+                                const u = course.videoUrl;
+                                if (!u) return null;
+                                let vid = '';
+                                try {
+                                  const url = new URL(u);
+                                  if (url.hostname.includes('youtube.com')) {
+                                    const v = url.searchParams.get('v');
+                                    if (v) vid = v;
+                                  } else if (url.hostname === 'youtu.be') {
+                                    vid = url.pathname.replace('/', '');
+                                  }
+                                } catch {}
+                                if (!vid) return null;
+                                const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+                                return (
+                                  <Link
+                                    to={`/courses/${course._id}/play`}
+                                    className="block group pointer-events-auto"
+                                  >
+                                    <div className="relative rounded-lg overflow-hidden border border-gray-200">
+                                      <img src={thumb} alt="Intro Video" className="w-full h-28 object-cover" />
+                                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                                        <div className="bg-white/20 backdrop-blur-md p-2 rounded-full border border-white/30 text-white flex items-center gap-1 text-[11px]">
+                                          <Play size={12} fill="currentColor" />
+                                          Intro Video
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </Link>
+                                );
+                              })()}
+                              <div className="pt-1">
+                                <Link
+                                  to={`/courses/${course._id}`}
+                                  className="text-[11px] font-bold text-indigo-600 hover:text-indigo-700 pointer-events-auto"
+                                >
+                                  View details
+                                </Link>
+                              </div>
                               <div className="pt-2 border-t">
                                 <div className="flex items-center gap-2 text-[10px] text-green-600 font-bold mb-1">
                                   <CheckCircle2 size={12} /> Certificate Included

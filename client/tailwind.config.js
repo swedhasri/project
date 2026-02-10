@@ -8,9 +8,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#4F46E5', // Indigo 600
-        secondary: '#8B5CF6', // Violet 500
-        dark: '#1F2937', // Gray 800
+        primary: '#4F46E5',
+        secondary: '#8B5CF6',
+        dark: '#1F2937',
+        navy: '#0b1324',
+        navyDeep: '#0f1e33',
+        cyanAccent: '#22d3ee'
       },
     },
   },

@@ -5,7 +5,7 @@ import { MessageSquare, Send, Bot, User, Search, Clock, PlusCircle } from 'lucid
 
 const initialGreeting = {
   role: 'assistant',
-  text: 'Hey there! I’m here like a friendly study buddy. What are you working on today?',
+  text: 'Hi! I’m Kiru, your friendly study buddy. What are you working on today?',
   timestamp: Date.now(),
 };
 
@@ -138,7 +138,7 @@ const Chatbot = () => {
       <Navbar />
       <div className="pt-24 pb-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-black mb-2">AI Chatbot</h1>
+          <h1 className="text-4xl font-bold text-black mb-2">Kiru</h1>
           <p className="text-gray-600">Instant help with study doubts and guidance.</p>
         </div>
 

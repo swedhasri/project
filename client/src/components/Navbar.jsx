@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, BookOpen, User, LogOut, LayoutDashboard, Sun, Moon, Gamepad2 } from 'lucide-react';
+import { Menu, X, BookOpen, User, LogOut, LayoutDashboard, Gamepad2 } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,22 +24,14 @@ const Navbar = () => {
     localStorage.setItem('theme', current);
   }, []);
 
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    const root = document.documentElement;
-    if (next === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
-    localStorage.setItem('theme', next);
-  };
-
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md fixed w-full z-50 top-0 left-0 border-b border-gray-100 dark:border-gray-800">
+    <nav className="bg-white dark:bg-gradient-to-b dark:from-navy dark:to-navyDeep shadow-md fixed w-full z-50 top-0 left-0 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center gap-2">
-              <BookOpen className="h-8 w-8 text-indigo-600" />
-              <span className="font-bold text-2xl tracking-tighter text-gray-800 dark:text-gray-100">Edu<span className="text-indigo-600">Bridge</span></span>
+              <BookOpen className="h-8 w-8 text-indigo-600 dark:text-cyanAccent" />
+              <span className="font-bold text-2xl tracking-tighter text-gray-800 dark:text-gray-100">Edu<span className="text-indigo-600 dark:text-cyanAccent">Bridge</span></span>
             </Link>
           </div>
 
@@ -51,14 +43,9 @@ const Navbar = () => {
               <Gamepad2 size={18} />
               Let's Play
             </Link>
-            <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">About Me</Link>
-            <Link to="/chatbot" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">AI Chatbot</Link>
+            <Link to="/dashboard" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">My Profile</Link>
+            <Link to="/chatbot" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">Kiru</Link>
             <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">Contact</Link>
-            <button onClick={toggleTheme} className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-              <span className="text-sm">{theme === 'dark' ? 'Light' : 'Dark'}</span>
-            </button>
-
             {user ? (
               <div className="flex items-center gap-4">
                 <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
@@ -97,8 +84,8 @@ const Navbar = () => {
               <Gamepad2 size={18} />
               Let's Play
             </Link>
-            <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800">About Me</Link>
-            <Link to="/chatbot" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800">AI Chatbot</Link>
+            <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800">My Profile</Link>
+            <Link to="/chatbot" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800">Kiru</Link>
             <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</Link>
 
             {user ? (
