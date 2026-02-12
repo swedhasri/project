@@ -28,3 +28,5 @@ yarn-error.log*
 #
 # Temporary stray files
 client/tailwind.config.js.
+
+.vercel
