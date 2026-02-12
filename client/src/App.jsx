@@ -17,6 +17,7 @@ import YouTubeGame from './components/games/YouTubeGame';
 
 import NotificationBar from './components/NotificationBar';
 import WelcomeToast from './components/WelcomeToast';
+import FloatingNotifications from './components/FloatingNotifications';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 font-sans">
           <NotificationBar />
           <WelcomeToast />
+          <FloatingNotifications />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
