@@ -16,11 +16,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const current = theme || (prefersDark ? 'dark' : 'light');
+    // Force light mode always
+    const current = 'light';
     setTheme(current);
     const root = document.documentElement;
-    if (current === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
+    root.classList.remove('dark');
     localStorage.setItem('theme', current);
   }, []);
 
