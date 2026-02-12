@@ -18,6 +18,7 @@ import YouTubeGame from './components/games/YouTubeGame';
 import NotificationBar from './components/NotificationBar';
 import WelcomeToast from './components/WelcomeToast';
 import FloatingNotifications from './components/FloatingNotifications';
+import Notifications from './pages/Notifications';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <FloatingNotifications />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/notifications" element={<Notifications />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/courses" element={<Courses />} />
