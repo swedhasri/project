@@ -15,11 +15,16 @@ import Chatbot from './pages/Chatbot';
 import Contact from './pages/Contact';
 import YouTubeGame from './components/games/YouTubeGame';
 
+import NotificationBar from './components/NotificationBar';
+import WelcomeToast from './components/WelcomeToast';
+
 function App() {
   return (
     <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 font-sans">
+          <NotificationBar />
+          <WelcomeToast />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />

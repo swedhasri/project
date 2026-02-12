@@ -64,6 +64,9 @@ const Login = () => {
     const result = await login(email, password);
     if (!result.success) {
       setError(result.error);
+    } else {
+      // Set flag for welcome message
+      sessionStorage.setItem('justLoggedIn', 'true');
     }
   };
 
