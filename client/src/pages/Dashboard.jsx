@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { BookOpen, TrendingUp, Clock, PlayCircle, Trophy } from 'lucide-react';
+import { BookOpen, TrendingUp, Clock, PlayCircle, Trophy, BarChart, CheckCircle } from 'lucide-react';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart as RBarChart, Bar } from 'recharts';
 import Navbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext';
 
@@ -9,6 +10,30 @@ const Dashboard = () => {
     const { user } = useContext(AuthContext);
     const [enrollments, setEnrollments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [dailyHistory, setDailyHistory] = useState([]);
+
+    // Logic for Daily History (Graph Data) - copied from About.jsx to ensure consistent experience
+    useEffect(() => {
+        const savedHistory = localStorage.getItem('progressHistory');
+        if (savedHistory) {
+            setDailyHistory(JSON.parse(savedHistory));
+        } else {
+            const days = 14;
+            const today = new Date();
+            const defaults = Array.from({ length: days }, (_, i) => {
+                const d = new Date(today);
+                d.setDate(today.getDate() - (days - 1 - i));
+                const key = d.toISOString().split('T')[0];
+                return { date: key, value: Math.floor(Math.random() * 40) + 10, active: Math.random() > 0.3 };
+            });
+            setDailyHistory(defaults);
+            localStorage.setItem('progressHistory', JSON.stringify(defaults));
+        }
+    }, []);
+
+    const history14 = dailyHistory.slice(-14);
+    const progressSeries = history14.map(d => ({ name: d.date.slice(5), value: d.value }));
+    const consistencySeries = history14.map(d => ({ name: d.date.slice(5), active: d.active ? 1 : 0 }));
 
     useEffect(() => {
         const fetchEnrollments = async () => {
@@ -64,33 +89,33 @@ const Dashboard = () => {
     if (!user) return <div className="p-10">Please login</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-white flex flex-col text-black">
             <Navbar />
 
             <div className="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user.name.split(' ')[0]}!</h1>
-                        <p className="text-gray-600 mt-1 flex items-center gap-2">
+                        <h1 className="text-3xl font-bold text-black">Welcome back, {user.name.split(' ')[0]}!</h1>
+                        <p className="text-black mt-1 flex items-center gap-2">
                             <span className="inline-block px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded uppercase">
                                 {user.educationLevel || 'Professional'}
                             </span>
                             {user.cgpa && <span>GPA: {user.cgpa}</span>}
                         </p>
                     </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-6">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex gap-6">
                         <div className="text-center">
-                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">Courses</p>
+                            <p className="text-xs text-black uppercase font-bold tracking-wide">Courses</p>
                             <p className="text-2xl font-bold text-indigo-600">{enrollments.length}</p>
                         </div>
                         <div className="w-px bg-gray-200"></div>
                         <div className="text-center">
-                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">Skills</p>
+                            <p className="text-xs text-black uppercase font-bold tracking-wide">Skills</p>
                             <p className="text-2xl font-bold text-green-600">{user.skills?.length || 0}</p>
                         </div>
                         <div className="w-px bg-gray-200"></div>
                         <div className="text-center">
-                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">XP</p>
+                            <p className="text-xs text-black uppercase font-bold tracking-wide">XP</p>
                             <p className="text-2xl font-bold text-yellow-500">1,250</p>
                         </div>
                     </div>
@@ -100,7 +125,7 @@ const Dashboard = () => {
                 {user.skills && user.skills.length > 0 && (
                     <div className="mb-8 flex flex-wrap gap-2">
                         {user.skills.map((skill, i) => (
-                            <span key={i} className="px-3 py-1 bg-white border border-gray-100 text-gray-600 text-xs font-bold rounded-lg shadow-sm">
+                            <span key={i} className="px-3 py-1 bg-white border border-gray-200 text-black text-xs font-bold rounded-lg shadow-sm">
                                 {skill}
                             </span>
                         ))}
@@ -124,28 +149,77 @@ const Dashboard = () => {
                         <p className="text-sm mt-3 text-indigo-100">Daily target almost reached!</p>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Next Reminder</h3>
+                            <h3 className="font-semibold text-lg text-black">Next Reminder</h3>
                             <Clock className="text-orange-500" />
                         </div>
-                        <p className="text-xl font-bold text-gray-800 mb-1">Web Dev Live Class</p>
-                        <p className="text-gray-500 text-sm mb-4">Today, 5:00 PM</p>
+                        <p className="text-xl font-bold text-black mb-1">Web Dev Live Class</p>
+                        <p className="text-black text-sm mb-4">Today, 5:00 PM</p>
                         <button className="w-full py-2 bg-orange-50 text-orange-600 font-medium rounded-lg hover:bg-orange-100 transition">
                             Join Session
                         </button>
                     </div>
 
-                    {/* Achievements card removed per request */}
+                    {/* Achievements Summary */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="font-semibold text-lg text-black">Achievements</h3>
+                            <Trophy className="text-yellow-500" />
+                        </div>
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2 text-green-600">
+                                <CheckCircle size={18} />
+                                <span className="text-sm font-medium">Completed first EDA report</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-indigo-600">
+                                <CheckCircle size={18} />
+                                <span className="text-sm font-medium">Reached 50% in DS/ML course</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">My Courses</h2>
+                {/* Graphs Row */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h2 className="text-xl font-bold text-black mb-4">Daily Progress</h2>
+                        <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={progressSeries} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" stroke="#000" />
+                                    <YAxis domain={[0, 100]} stroke="#000" />
+                                    <Tooltip contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', color: '#000' }} />
+                                    <Line type="monotone" dataKey="value" stroke="#4f46e5" strokeWidth={2} dot={false} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h2 className="text-xl font-bold text-black mb-4">Consistency</h2>
+                        <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <RBarChart data={consistencySeries} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" stroke="#000" />
+                                    <YAxis domain={[0, 1]} tickFormatter={(v) => (v ? 'On' : 'Off')} stroke="#000" />
+                                    <Tooltip contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', color: '#000' }} />
+                                    <Bar dataKey="active" fill="#22c55e" />
+                                </RBarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 className="text-2xl font-bold text-black mb-6">My Courses</h2>
                 {loading ? (
                     <div className="flex justify-center p-12">Loading...</div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {enrollments.map((enrollment) => (
-                            <div key={enrollment._id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                            <div key={enrollment._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
                                 <div className="relative h-40">
                                     <img src={enrollment.course.thumbnailUrl} alt={enrollment.course.title} className="w-full h-full object-cover" />
                                     <div className="absolute inset-0 bg-black/20"></div>
@@ -160,7 +234,7 @@ const Dashboard = () => {
                                     </div>
                                 </div>
                                 <div className="p-6 flex flex-col flex-grow">
-                                    <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1">{enrollment.course.title}</h3>
+                                    <h3 className="text-lg font-bold text-black mb-2 line-clamp-1">{enrollment.course.title}</h3>
                                     <Link
                                         to={`/courses/${enrollment.course._id}/play`}
                                         className="mt-auto flex items-center justify-center gap-2 w-full py-2 bg-indigo-50 text-indigo-600 font-semibold rounded-lg hover:bg-indigo-100 transition"
