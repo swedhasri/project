@@ -64,7 +64,7 @@ const Navbar = () => {
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
-    <nav className="bg-white dark:bg-gradient-to-b dark:from-navy dark:to-navyDeep shadow-md fixed w-full z-50 top-0 left-0 border-b border-gray-100 dark:border-gray-800">
+    <nav className="bg-white dark:bg-gradient-to-b dark:from-navy dark:to-navyDeep shadow-md sticky w-full z-50 top-0 left-0 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
